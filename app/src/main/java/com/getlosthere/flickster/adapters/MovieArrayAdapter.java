@@ -18,6 +18,12 @@ import java.util.List;
  * Created by violetaria on 7/18/16.
  */
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
+    private static class ViewHolder {
+        TextView overview;
+        TextView title;
+        ImageView image;
+    }
+
     public MovieArrayAdapter(Context context, List<Movie> movies){
         super(context, android.R.layout.simple_list_item_1, movies);
     }
@@ -26,23 +32,25 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
     public View getView(int position, View convertView, ViewGroup parent) {
         Movie movie = getItem(position);
 
+        ViewHolder viewHolder;
         if(convertView == null){
+            viewHolder = new ViewHolder();
             LayoutInflater inflator = LayoutInflater.from(getContext());
             convertView = inflator.inflate(R.layout.item_movie, parent, false);
+            viewHolder.overview = (TextView) convertView.findViewById(R.id.tvOverview);
+            viewHolder.title = (TextView) convertView.findViewById(R.id.tvTitle);
+            viewHolder.image = (ImageView) convertView.findViewById(R.id.ivMovieImage);
+            convertView.setTag(viewHolder);
         }
+        else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+å
+        viewHolder.image.setImageResource(0);
+        viewHolder.title.setText(movie.getOriginalTitle());
+        viewHolder.overview.setText(movie.getOverview());
 
-        ImageView ivImageView = (ImageView) convertView.findViewById(R.id.ivMovieImage);
-        ivImageView.setImageResource(0);
-
-        TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-
-        TextView tvOverview = (TextView) convertView.findViewById(R.id.tvOverview);
-
-        tvTitle.setText(movie.getOriginalTitle());
-        tvOverview.setText(movie.getOverview());
-
-        Picasso.with(getContext()).load(movie.getPosterPath()).into(ivImageView);
-
+        Picasso.with(getContext()).load(movie.getPosterPath()).into(viewHolder.image);
         return convertView;
     }
 }
