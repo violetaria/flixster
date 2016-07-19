@@ -1,9 +1,10 @@
 package com.getlosthere.flickster;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.getlosthere.flickster.models.Movie;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -11,9 +12,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import cz.msebera.android.httpclient.Header;
 
 public class MovieActivity extends AppCompatActivity {
+    ArrayList<Movie> movies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +35,8 @@ public class MovieActivity extends AppCompatActivity {
 
                 try {
                     movieJSONResults = response.getJSONArray("results");
-                    Log.d("DEBUG",movieJSONResults.toString());
+                    movies = Movie.fromJSONArray(movieJSONResults);
+                    Log.d("DEBUG",movies.toString());
 
                 } catch (JSONException e) {
                     e.printStackTrace();
