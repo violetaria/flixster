@@ -1,6 +1,7 @@
 package com.getlosthere.flickster.adapters;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +32,10 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Movie movie = getItem(position);
-
         ViewHolder viewHolder;
+        int orientation = getContext().getResources().getConfiguration().orientation;
+        String imagePath;
+
         if(convertView == null){
             viewHolder = new ViewHolder();
             LayoutInflater inflator = LayoutInflater.from(getContext());
@@ -45,12 +48,19 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-å
+
         viewHolder.image.setImageResource(0);
         viewHolder.title.setText(movie.getOriginalTitle());
         viewHolder.overview.setText(movie.getOverview());
 
-        Picasso.with(getContext()).load(movie.getPosterPath()).into(viewHolder.image);
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            imagePath = movie.getBackdropPath();
+        } else {
+            imagePath = movie.getPosterPath();
+        }
+
+        Picasso.with(getContext()).load(imagePath).into(viewHolder.image);
+
         return convertView;
     }
 }
