@@ -11,6 +11,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         tools:src="@mipmap/ic_launcher"/>
 
     <TextView
@@ -28,6 +30,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvOverview"
         tools:text="After he reunites with an old pal through Facebook, a mild-mannered accountant is lured into the world of international espionage."
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_below="@+id/tvTitle"
         android:layout_toRightOf="@+id/ivMovieImage"
         android:layout_toEndOf="@+id/ivMovieImage"/>
