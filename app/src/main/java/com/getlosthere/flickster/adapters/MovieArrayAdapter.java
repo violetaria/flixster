@@ -62,23 +62,70 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         int screenWidth = DeviceDimensionsHelper.getDisplayWidth(getContext());
         int screenHeight = DeviceDimensionsHelper.getDisplayHeight(getContext());
 
+//        backdrop_sizes: [
+//        "w300",
+//                "w780",
+//                "w1280",
+//                "original"
+//        ],
+//        poster_sizes: [
+//        "w92",
+//                "w154",
+//                "w185",
+//                "w342",
+//                "w500",
+//                "w780",
+//                "original"
+//        ],
+        int screenSize = getContext().getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+        String imageSize;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             imageHeight = 0;
             imageWidth = 2 * screenWidth / 3;
 
-            imagePath = movie.getBackdropPath();
-
 //            viewHolder.image.getLayoutParams().height = 2 * screenHeight / 3;
 //            viewHolder.image.getLayoutParams().width = 3 * screenWidth / 4;
+
+            switch (screenSize) {
+                case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                    imageSize = "w1280";
+                    break;
+                case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                    imageSize = "w780";
+                    break;
+                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                case Configuration.SCREENLAYOUT_SIZE_SMALL:
+                    imageSize = "w300";
+                    break;
+                case Configuration.SCREENLAYOUT_SIZE_UNDEFINED:
+                default:
+                    imageSize = "w300";
+                    break;
+            }
+            imagePath = movie.getBackdropPath(imageSize);
+
         } else {
             // Get height of screen if portrait
             imageHeight = 0;
             imageWidth = screenWidth / 2;
 
-            imagePath = movie.getPosterPath();
-
 //            viewHolder.image.getLayoutParams().height = screenHeight;
 //            viewHolder.image.getLayoutParams().width = screenWidth / 2;
+            switch (screenSize) {
+                case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                    imageSize = "w780";
+                    break;
+                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                    imageSize = "w500";
+                    break;
+                case Configuration.SCREENLAYOUT_SIZE_SMALL:
+                case Configuration.SCREENLAYOUT_SIZE_UNDEFINED:
+                default:
+                    imageSize = "w185";
+                    break;
+            }
+            imagePath = movie.getPosterPath(imageSize);
         }
 
         Picasso.with(getContext()).load(imagePath).resize(imageWidth, imageHeight).into(viewHolder.image);

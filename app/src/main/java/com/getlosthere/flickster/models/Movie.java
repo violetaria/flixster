@@ -10,16 +10,27 @@ import java.util.ArrayList;
  * Created by violetaria on 7/18/16.
  */
 public class Movie {
+    private String defaultPosterSize = "w500";
+    private String defaultBackdropSize = "w780";
+
     public String getPosterPath() {
-        return String.format("https://image.tmdb.org/t/p/w342/%s",posterPath);
+        return getPosterPath(defaultPosterSize);
+    }
+
+    public String getPosterPath(String size) {
+        return String.format("https://image.tmdb.org/t/p/%s/%s",size,posterPath);
     }
 
     public Boolean getAdult() {
         return adult;
     }
 
-    public String getBackdropPath() {
-        return String.format("https://image.tmdb.org/t/p/w342/%s",backdropPath);
+    public String getBackdropPath(String size) {
+        return String.format("https://image.tmdb.org/t/p/%s/%s",size,backdropPath);
+    }
+
+    public String getBackdropPath(){
+        return getBackdropPath(defaultBackdropSize);
     }
 
     public String getOriginalTitle() {
