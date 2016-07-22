@@ -20,62 +20,186 @@ import java.util.List;
  * Created by violetaria on 7/18/16.
  */
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
-    private static class ViewHolder {
+    private static class UnpopularViewHolder {
         TextView overview;
         TextView title;
         ImageView image;
     }
 
+    private static class PopularViewHolder {
+        ImageView image;
+    }
+
     public MovieArrayAdapter(Context context, List<Movie> movies){
-        super(context, android.R.layout.simple_list_item_1, movies);
+        super(context, 0, movies);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        return getItem(position).popularity.ordinal();
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return Movie.PopularityValues.values().length;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        int viewType = this.getItemViewType(position);
+
         Movie movie = getItem(position);
-        ViewHolder viewHolder;
 
         // Get orientation of device
         int orientation = getContext().getResources().getConfiguration().orientation;
 
-        String imagePath;
-        int imageWidth;
-        int imageHeight;
-
-        if(convertView == null){
-            viewHolder = new ViewHolder();
-            LayoutInflater inflator = LayoutInflater.from(getContext());
-            convertView = inflator.inflate(R.layout.item_movie, parent, false);
-            viewHolder.overview = (TextView) convertView.findViewById(R.id.tvOverview);
-            viewHolder.title = (TextView) convertView.findViewById(R.id.tvTitle);
-            viewHolder.image = (ImageView) convertView.findViewById(R.id.ivMovieImage);
-            convertView.setTag(viewHolder);
-        }
-        else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
-
-        viewHolder.image.setImageResource(0);
-        viewHolder.title.setText(movie.getOriginalTitle());
-        viewHolder.overview.setText(movie.getOverview());
-
-        int screenWidth = DeviceDimensionsHelper.getDisplayWidth(getContext());
-        int screenHeight = DeviceDimensionsHelper.getDisplayHeight(getContext());
-
+        // Get screen size of device
         int screenSize = getContext().getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+
+        String imagePath;
+        int placeholderImage;
+        int imageWidth;
         String imageSize;
 
-//        Bitmap bMap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.movie_placeholder);
-//        Bitmap bMapScaled;
+        if(viewType == Movie.PopularityValues.POPULAR.ordinal()) {
+            PopularViewHolder viewHolder1 = new PopularViewHolder();
+
+            View v = convertView;
+
+            if (v == null) {
+                v = LayoutInflater.from(getContext()).inflate(R.layout.item_popular_movie, parent, false);
+                viewHolder1.image = (ImageView) v.findViewById(R.id.ivMovieImage);
+
+                v.setTag(viewHolder1);
+            } else {
+                viewHolder1 = (PopularViewHolder) v.getTag();
+            }
+            viewHolder1.image.setImageResource(0);
+
+            imageWidth = calculateImageWidth(orientation, viewType);
+            imageSize = getImageSizeForOrientation(orientation, screenSize);
+            imagePath = movie.getBackdropPath(imageSize);
+            placeholderImage = R.drawable.movie_placeholder_land;
+
+            Picasso.with(getContext()).load(imagePath).resize(imageWidth, 0).placeholder(placeholderImage).into(viewHolder1.image);
+
+            return v;
+        } else {
+            UnpopularViewHolder viewHolder2 = new UnpopularViewHolder();
+
+            View v = convertView;
+
+            if(v == null){
+                v =  LayoutInflater.from(getContext()).inflate(R.layout.item_movie, parent, false);
+                viewHolder2.image = (ImageView) v.findViewById(R.id.ivMovieImage);
+                viewHolder2.title = (TextView) v.findViewById(R.id.tvTitle);
+                viewHolder2.overview = (TextView) v.findViewById(R.id.tvOverview);
+
+                v.setTag(viewHolder2);
+            }
+            else {
+                viewHolder2 = (UnpopularViewHolder) v.getTag();
+            }
+            viewHolder2.image.setImageResource(0);
+            viewHolder2.title.setText(movie.getOriginalTitle());
+            viewHolder2.overview.setText(movie.getOverview());
+
+            imageWidth = calculateImageWidth(orientation,viewType);
+            imageSize = getImageSizeForOrientation(orientation, screenSize);
+
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                imagePath = movie.getBackdropPath(imageSize);
+                placeholderImage = R.drawable.movie_placeholder_land;
+            } else {
+                imagePath = movie.getPosterPath(imageSize);
+                placeholderImage = R.drawable.movie_placeholder;
+            }
+
+            Picasso.with(getContext()).load(imagePath).resize(imageWidth, 0).placeholder(placeholderImage).into(viewHolder2.image);
+
+            return v;
+        }
+
+
+
+
+
+//        int screenWidth = DeviceDimensionsHelper.getDisplayWidth(getContext());
+//        int screenHeight = DeviceDimensionsHelper.getDisplayHeight(getContext());
+//
+//        int screenSize = getContext().getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+//        String imageSize;
+//
+////        Bitmap bMap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.movie_placeholder);
+////        Bitmap bMapScaled;
+//        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            imageHeight = 0;
+//            imageWidth = 2 * screenWidth / 3;
+//
+////            bMapScaled = BitmapScaler.scaleToFitWidth(bMap, imageWidth);
+//
+////            viewHolder.image.getLayoutParams().height = screenHeight;
+////            viewHolder.image.getLayoutParams().width = 2 * screenWidth / 3;
+//
+//            switch (screenSize) {
+//                case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+//                    imageSize = "w1280";
+//                    break;
+//                case Configuration.SCREENLAYOUT_SIZE_LARGE:
+//                    imageSize = "w780";
+//                    break;
+//                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+//                case Configuration.SCREENLAYOUT_SIZE_SMALL:
+//                case Configuration.SCREENLAYOUT_SIZE_UNDEFINED:
+//                default:
+//                    imageSize = "w300";
+//                    break;
+//            }
+//        } else {
+//            imageHeight = 0;
+//            imageWidth = screenWidth / 2;
+//
+////            bMapScaled = BitmapScaler.scaleToFitHeight(bMap, imageHeight);
+//
+////            viewHolder.image.getLayoutParams().height = screenHeight / 2;
+////            viewHolder.image.getLayoutParams().width = screenWidth / 2;
+//            switch (screenSize) {
+//                case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+//                case Configuration.SCREENLAYOUT_SIZE_LARGE:
+//                    imageSize = "w780";
+//                    break;
+//                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+//                    imageSize = "w500";
+//                    break;
+//                case Configuration.SCREENLAYOUT_SIZE_SMALL:
+//                case Configuration.SCREENLAYOUT_SIZE_UNDEFINED:
+//                default:
+//                    imageSize = "w185";
+//                    break;
+//            }
+//
+//        }
+//
+//
+//        Log.d("DEBUG",imagePath);
+//        Picasso.with(getContext()).load(imagePath).resize(imageWidth, 0).placeholder(placeholderImage).into(viewHolder.image);
+////        Picasso.with(getContext()).load(imagePath).placeholder(R.mipmap.ic_launcher).fit().centerInside().into(viewHolder.image);
+    }
+
+    private int calculateImageWidth(int orientation, int viewType) {
+        int screenWidth = DeviceDimensionsHelper.getDisplayWidth(getContext());
+
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE || viewType == Movie.PopularityValues.POPULAR.ordinal()) {
+            return  2 * screenWidth / 3;
+        } else {
+            return screenWidth / 2;
+        }
+    }
+
+    private String getImageSizeForOrientation(int orientation, int screenSize) {
+        String imageSize;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            imageHeight = 0;
-            imageWidth = 2 * screenWidth / 3;
-
-//            bMapScaled = BitmapScaler.scaleToFitWidth(bMap, imageWidth);
-
-//            viewHolder.image.getLayoutParams().height = screenHeight;
-//            viewHolder.image.getLayoutParams().width = 2 * screenWidth / 3;
-
             switch (screenSize) {
                 case Configuration.SCREENLAYOUT_SIZE_XLARGE:
                     imageSize = "w1280";
@@ -90,16 +214,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
                     imageSize = "w300";
                     break;
             }
-            imagePath = movie.getBackdropPath(imageSize);
-
         } else {
-            imageHeight = 0;
-            imageWidth = screenWidth / 2;
-
-//            bMapScaled = BitmapScaler.scaleToFitHeight(bMap, imageHeight);
-
-//            viewHolder.image.getLayoutParams().height = screenHeight / 2;
-//            viewHolder.image.getLayoutParams().width = screenWidth / 2;
             switch (screenSize) {
                 case Configuration.SCREENLAYOUT_SIZE_XLARGE:
                 case Configuration.SCREENLAYOUT_SIZE_LARGE:
@@ -114,12 +229,51 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
                     imageSize = "w185";
                     break;
             }
-            imagePath = movie.getPosterPath(imageSize);
         }
-
-        Picasso.with(getContext()).load(imagePath).resize(imageWidth, imageHeight).placeholder(R.drawable.movie_placeholder).into(viewHolder.image);
-//        Picasso.with(getContext()).load(imagePath).placeholder(R.mipmap.ic_launcher).fit().centerInside().into(viewHolder.image);
-
-        return convertView;
+        return imageSize;
+//            imageHeight = 0;
+//            imageWidth = 2 * screenWidth / 3;
+//
+////            bMapScaled = BitmapScaler.scaleToFitWidth(bMap, imageWidth);
+//
+////            viewHolder.image.getLayoutParams().height = screenHeight;
+////            viewHolder.image.getLayoutParams().width = 2 * screenWidth / 3;
+//
+//            switch (screenSize) {
+//                case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+//                    imageSize = "w1280";
+//                    break;
+//                case Configuration.SCREENLAYOUT_SIZE_LARGE:
+//                    imageSize = "w780";
+//                    break;
+//                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+//                case Configuration.SCREENLAYOUT_SIZE_SMALL:
+//                case Configuration.SCREENLAYOUT_SIZE_UNDEFINED:
+//                default:
+//                    imageSize = "w300";
+//                    break;
+//            }
+//        } else {
+//            imageHeight = 0;
+//            imageWidth = screenWidth / 2;
+//
+////            bMapScaled = BitmapScaler.scaleToFitHeight(bMap, imageHeight);
+//
+////            viewHolder.image.getLayoutParams().height = screenHeight / 2;
+////            viewHolder.image.getLayoutParams().width = screenWidth / 2;
+//            switch (screenSize) {
+//                case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+//                case Configuration.SCREENLAYOUT_SIZE_LARGE:
+//                    imageSize = "w780";
+//                    break;
+//                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+//                    imageSize = "w500";
+//                    break;
+//                case Configuration.SCREENLAYOUT_SIZE_SMALL:
+//                case Configuration.SCREENLAYOUT_SIZE_UNDEFINED:
+//                default:
+//                    imageSize = "w185";
+//                    break;
+//            }
     }
 }
