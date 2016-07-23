@@ -82,7 +82,8 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
             imagePath = movie.getBackdropPath(imageSize);
             placeholderImage = R.drawable.movie_placeholder_land;
 
-            Picasso.with(getContext()).load(imagePath).resize(imageWidth, 0).placeholder(placeholderImage).into(viewHolder1.image);
+            // Picasso.with(getContext()).load(imagePath).resize(imageWidth, 0).placeholder(placeholderImage).into(viewHolder1.image);
+            Picasso.with(getContext()).load(imagePath).fit().centerInside().placeholder(placeholderImage).into(viewHolder1.image);
 
             return v;
         } else {
@@ -120,71 +121,16 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
             return v;
         }
+    }
 
+    private int calculateImageHeight(int orientation) {
+        int screenHeight = DeviceDimensionsHelper.getDisplayHeight(getContext());
 
-
-
-
-//        int screenWidth = DeviceDimensionsHelper.getDisplayWidth(getContext());
-//        int screenHeight = DeviceDimensionsHelper.getDisplayHeight(getContext());
-//
-//        int screenSize = getContext().getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
-//        String imageSize;
-//
-////        Bitmap bMap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.movie_placeholder);
-////        Bitmap bMapScaled;
-//        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            imageHeight = 0;
-//            imageWidth = 2 * screenWidth / 3;
-//
-////            bMapScaled = BitmapScaler.scaleToFitWidth(bMap, imageWidth);
-//
-////            viewHolder.image.getLayoutParams().height = screenHeight;
-////            viewHolder.image.getLayoutParams().width = 2 * screenWidth / 3;
-//
-//            switch (screenSize) {
-//                case Configuration.SCREENLAYOUT_SIZE_XLARGE:
-//                    imageSize = "w1280";
-//                    break;
-//                case Configuration.SCREENLAYOUT_SIZE_LARGE:
-//                    imageSize = "w780";
-//                    break;
-//                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-//                case Configuration.SCREENLAYOUT_SIZE_SMALL:
-//                case Configuration.SCREENLAYOUT_SIZE_UNDEFINED:
-//                default:
-//                    imageSize = "w300";
-//                    break;
-//            }
-//        } else {
-//            imageHeight = 0;
-//            imageWidth = screenWidth / 2;
-//
-////            bMapScaled = BitmapScaler.scaleToFitHeight(bMap, imageHeight);
-//
-////            viewHolder.image.getLayoutParams().height = screenHeight / 2;
-////            viewHolder.image.getLayoutParams().width = screenWidth / 2;
-//            switch (screenSize) {
-//                case Configuration.SCREENLAYOUT_SIZE_XLARGE:
-//                case Configuration.SCREENLAYOUT_SIZE_LARGE:
-//                    imageSize = "w780";
-//                    break;
-//                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-//                    imageSize = "w500";
-//                    break;
-//                case Configuration.SCREENLAYOUT_SIZE_SMALL:
-//                case Configuration.SCREENLAYOUT_SIZE_UNDEFINED:
-//                default:
-//                    imageSize = "w185";
-//                    break;
-//            }
-//
-//        }
-//
-//
-//        Log.d("DEBUG",imagePath);
-//        Picasso.with(getContext()).load(imagePath).resize(imageWidth, 0).placeholder(placeholderImage).into(viewHolder.image);
-////        Picasso.with(getContext()).load(imagePath).placeholder(R.mipmap.ic_launcher).fit().centerInside().into(viewHolder.image);
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            return   2 * screenHeight / 3;
+        } else {
+            return 2 * screenHeight / 3;
+        }
     }
 
     private int calculateImageWidth(int orientation, int viewType) {
@@ -205,9 +151,9 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
                     imageSize = "w1280";
                     break;
                 case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
                     imageSize = "w780";
                     break;
-                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
                 case Configuration.SCREENLAYOUT_SIZE_SMALL:
                 case Configuration.SCREENLAYOUT_SIZE_UNDEFINED:
                 default:
