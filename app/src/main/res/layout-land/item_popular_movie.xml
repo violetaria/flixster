@@ -3,6 +3,8 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
                 xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
@@ -15,7 +17,6 @@
         android:layout_centerInParent="true"
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         tools:src="@drawable/movie_placeholder_land"/>

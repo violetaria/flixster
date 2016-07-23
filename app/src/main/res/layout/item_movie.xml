@@ -3,7 +3,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="40dp"
+                android:paddingLeft="30dp"
                 android:paddingRight="20dp">
 
     <ImageView
@@ -13,7 +13,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
@@ -24,6 +25,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/item_title_text_size"
         android:textStyle="bold"
+        android:textColor="@color/colorLightLavendar"
         tools:text="Central Intelligence"
         android:id="@+id/tvTitle"
         android:layout_alignParentTop="true"
@@ -34,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/item_overview_text_size"
+        android:textColor="@color/colorLightLavendar"
         tools:text="After he reunites with an old pal through Facebook, a mild-mannered accountant is lured into the world of international espionage."
         android:id="@+id/tvOverview"
         android:layout_below="@+id/tvTitle"
