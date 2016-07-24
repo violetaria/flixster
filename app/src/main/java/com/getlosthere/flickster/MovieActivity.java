@@ -30,6 +30,7 @@ public class MovieActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeContainer;
     MovieRestClient movieClient;
     private final int REQUEST_CODE = 20;
+    String movieVideoKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +86,34 @@ public class MovieActivity extends AppCompatActivity {
     public void launchQuickPlayView(int position){
         Movie movie = movies.get(position);
 
-        Intent i = new Intent(MovieActivity.this, QuickPlayActivity.class);
+        int movieId = movie.getExtId();
 
-        i.putExtra("external_movie_id", movie.getExtId());
-        i.putExtra("code", REQUEST_CODE);
+        MovieRestClient.get(Integer.toString(movieId) + "/videos", null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                JSONArray videoJSONResults = null;
+                try {
+                    videoJSONResults = response.getJSONArray("results");
+                    JSONObject videoObject = videoJSONResults.getJSONObject(0); // always grab the first one for now
 
-        startActivity(i);
+                    Intent i = new Intent(MovieActivity.this, QuickPlayActivity.class);
+
+                    i.putExtra("movie_key", videoObject.getString("key"));
+                    i.putExtra("code", REQUEST_CODE);
+
+                    startActivity(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
+
+//        getMovieVideo(movie.getExtId());
     }
 
     private void setupListViewListener(){
@@ -118,11 +141,31 @@ public class MovieActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+//    public void getMovieVideo(int movieId) {
+//        MovieRestClient.get(Integer.toString(movieId) + "/videos", null, new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                JSONArray videoJSONResults = null;
+//                try {
+//                    videoJSONResults = response.getJSONArray("results");
+//                    JSONObject videoObject = videoJSONResults.getJSONObject(0); // always grab the first one for now
+//                    movieVideoKey = videoObject.getString("key");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+//                super.onFailure(statusCode, headers, responseString, throwable);
+//            }
+//        });
+//    }
+
     public void getNowPlaying() {
         MovieRestClient.get("now_playing", null, new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 JSONArray movieJSONResults = null;
-
                 try {
                     movieJSONResults = response.getJSONArray("results");
                     movies.clear();

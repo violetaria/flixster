@@ -14,6 +14,7 @@ import com.getlosthere.flickster.models.Movie;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,6 +26,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 30;
     Movie movie;
     int movieId;
+    String movieVideoKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +40,59 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     public void launchQuickPlayView(){
+        MovieRestClient.get(Integer.toString(movieId) + "/videos", null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                JSONArray videoJSONResults = null;
+                try {
+                    videoJSONResults = response.getJSONArray("results");
+                    JSONObject videoObject = videoJSONResults.getJSONObject(0); // always grab the first one for now
 
-        Intent i = new Intent(MovieDetailActivity.this, QuickPlayActivity.class);
+                    Intent i = new Intent(MovieDetailActivity.this, QuickPlayActivity.class);
 
-        i.putExtra("external_movie_id", movieId);
-        i.putExtra("code", REQUEST_CODE);
+                    i.putExtra("movie_key", videoObject.getString("key"));
+                    i.putExtra("code", REQUEST_CODE);
 
-        startActivity(i);
+                    startActivity(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
+//        getMovieVideo(movieId);
+//
+//        Intent i = new Intent(MovieDetailActivity.this, QuickPlayActivity.class);
+//
+//        i.putExtra("movie_key", movieVideoKey);
+//        i.putExtra("code", REQUEST_CODE);
+//
+//        startActivity(i);
+    }
+
+    public void getMovieVideo(int movieId) {
+        MovieRestClient.get(Integer.toString(movieId) + "/videos", null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                JSONArray videoJSONResults = null;
+                try {
+                    videoJSONResults = response.getJSONArray("results");
+                    JSONObject videoObject = videoJSONResults.getJSONObject(0); // always grab the first one for now
+                    movieVideoKey = videoObject.getString("key");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
     }
 
     public void getMovieInfo(int movieId) {
