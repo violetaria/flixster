@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getlosthere.flickster.clients.MovieRestClient;
 import com.getlosthere.flickster.models.Movie;
@@ -21,25 +22,36 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class MovieDetailActivity extends AppCompatActivity {
     private final int RESULT_OK = 40;
+    private final int REQUEST_CODE = 30;
+    Movie movie;
+    int movieId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
 
-        int extMovieId = getIntent().getIntExtra("external_movie_id",0);
-//        int movieId = getIntent().getIntExtra("movie_id",0);
-        getMovieInfo(extMovieId);
-//        getVideoInfo(extId);
+        movieId = getIntent().getIntExtra("external_movie_id",0);
+        getMovieInfo(movieId);
 
         int code = getIntent().getIntExtra("code",0);
     }
 
+    public void launchQuickPlayView(){
+
+        Intent i = new Intent(MovieDetailActivity.this, QuickPlayActivity.class);
+
+        i.putExtra("external_movie_id", movieId);
+        i.putExtra("code", REQUEST_CODE);
+
+        startActivity(i);
+    }
+
     public void getMovieInfo(int movieId) {
-        MovieRestClient.get( Integer.toString(movieId), null, new JsonHttpResponseHandler() {
+        MovieRestClient.get(Integer.toString(movieId), null, new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    Movie movie = new Movie(response);
+                    movie = new Movie(response);
 
                     TextView tvTitle = (TextView) findViewById(R.id.tvTitle);
                     TextView tvSynopsis = (TextView) findViewById(R.id.tvSynopsis);
@@ -61,6 +73,12 @@ public class MovieDetailActivity extends AppCompatActivity {
                     }
                     if (ivMovieImage != null) {
                         Picasso.with(getApplicationContext()).load(movie.getBackdropPath()).transform(new RoundedCornersTransformation(10, 10)).fit().centerInside().placeholder(R.drawable.movie_placeholder_land).into(ivMovieImage);
+                        ivMovieImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                launchQuickPlayView();
+                            }
+                        });
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -84,5 +102,17 @@ public class MovieDetailActivity extends AppCompatActivity {
         setResult(RESULT_OK, data); // set result code and bundle data for response
 
         this.finish();
+    }
+
+    // ## TODO FIX THIS
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            // Extract name value from result extras
+//            String name = data.getExtras().getString("name");
+            int code = data.getExtras().getInt("code", 0);
+            // Toast the name to display temporarily on screen
+            Toast.makeText(this, "hey now", Toast.LENGTH_SHORT).show();
+        }
     }
 }

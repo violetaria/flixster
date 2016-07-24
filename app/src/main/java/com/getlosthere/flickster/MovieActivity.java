@@ -58,10 +58,7 @@ public class MovieActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
-                fetchNowPlayingAsync(0);
+                fetchPopularAsync(0);
             }
         });
 
@@ -85,11 +82,27 @@ public class MovieActivity extends AppCompatActivity {
         }
     }
 
+    public void launchQuickPlayView(int position){
+        Movie movie = movies.get(position);
+
+        Intent i = new Intent(MovieActivity.this, QuickPlayActivity.class);
+
+        i.putExtra("external_movie_id", movie.getExtId());
+        i.putExtra("code", REQUEST_CODE);
+
+        startActivity(i);
+    }
+
     private void setupListViewListener(){
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                launchMovieDetailView(position);
+                Movie movie = movies.get(position);
+                if(movie.getPopularity() == Movie.PopularityValues.POPULAR) {
+                    launchQuickPlayView(position);
+                } else {
+                    launchMovieDetailView(position);
+                }
             }
         });
     }
@@ -131,6 +144,7 @@ public class MovieActivity extends AppCompatActivity {
 
     public void getPopular() {
         MovieRestClient.get("popular", null, new JsonHttpResponseHandler() {
+            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 JSONArray movieJSONResults = null;
 
@@ -151,6 +165,16 @@ public class MovieActivity extends AppCompatActivity {
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
         });
+    }
+
+
+    public void fetchPopularAsync(int page) {
+        // Send the network request to fetch the updated data
+        // `client` here is an instance of Android Async HTTP
+        getPopular();
+
+        // Now we call setRefreshing(false) to signal refresh has finished
+        swipeContainer.setRefreshing(false);
     }
 
     public void fetchNowPlayingAsync(int page) {
