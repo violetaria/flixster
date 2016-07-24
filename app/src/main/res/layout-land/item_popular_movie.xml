@@ -7,17 +7,30 @@
                 android:layout_marginBottom="1dp"
                 xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:id="@+id/ivMovieImage"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerInParent="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        tools:src="@drawable/movie_placeholder_land"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:id="@+id/ivMovieImage"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            tools:src="@drawable/movie_placeholder_land"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/youtube_icon"
+            android:background="@null"
+            android:layout_centerInParent="true"/>
+        </RelativeLayout>
 </RelativeLayout>
