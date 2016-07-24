@@ -11,6 +11,10 @@
     android:theme="@style/AppTheme"
     tools:context="com.getlosthere.flickster.MovieDetailActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +24,16 @@
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         tools:src="@drawable/movie_placeholder_land"/>
+
+
+    <ImageView
+        android:src="@drawable/youtube_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
