@@ -20,11 +20,19 @@ public class Movie {
     Boolean adult;
     String overview;
     Double rating;
+    String releaseDate;
+    String synopsis;
+    int extId;
 
     public PopularityValues popularity;
 
     private String defaultPosterSize = "w500";
     private String defaultBackdropSize = "w780";
+
+
+    public String getReleaseDate() { return releaseDate; }
+
+    public String getSynopsis() { return synopsis; }
 
     public String getPosterPath() {
         return getPosterPath(defaultPosterSize);
@@ -52,13 +60,19 @@ public class Movie {
 
     public PopularityValues getPopularity() { return popularity; }
 
+    public int getExtId() { return extId; }
+
     public Movie(JSONObject jsonObject)throws JSONException {
         this.posterPath = jsonObject.getString("poster_path");
         this.backdropPath = jsonObject.getString("backdrop_path");
-        this.overview = jsonObject.getString("overview");
+        this.overview = jsonObject.getString("overview"); // bah humbug
         this.adult = jsonObject.getBoolean("adult");
         this.originalTitle = jsonObject.getString("original_title");
         this.rating = jsonObject.getDouble("vote_average");
+        this.releaseDate = jsonObject.getString("release_date");
+        this.synopsis = jsonObject.getString("overview");
+        this.extId = jsonObject.getInt("id");
+
         this.popularity = (this.rating) > 5 ? PopularityValues.POPULAR : PopularityValues.UNPOPULAR;
     }
 

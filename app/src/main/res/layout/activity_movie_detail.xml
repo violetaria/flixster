@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:theme="@style/AppTheme"
+    tools:context="com.getlosthere.flickster.MovieDetailActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivMovieImage"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        tools:src="@drawable/movie_placeholder_land"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTitle"
+        android:textStyle="bold"
+        tools:text="Central Intelligence"
+        android:textSize="@dimen/item_title_text_size"
+        android:layout_marginTop="4dp"
+        android:layout_below="@id/ivMovieImage"
+        android:layout_centerInParent="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tvReleaseDate"
+        android:layout_below="@+id/tvTitle"
+        android:layout_centerInParent="true"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textSize="@dimen/item_release_date_text_size"
+        tools:text="1999-09-22"
+        />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rbRating"
+        android:layout_below="@+id/tvReleaseDate"
+        android:layout_centerInParent="true"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:numStars="5"
+        android:stepSize=".5"
+        android:isIndicator="true"
+        style="@style/movieRatingBar"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tvSynopsis"
+        android:textSize="@dimen/item_synopsis_text_size"
+        tools:text="After he reunites with an old pal through Facebook, a mild-mannered accountant is lured into the world of international espionage."
+        android:layout_below="@+id/rbRating"
+        android:paddingTop="4dp"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
