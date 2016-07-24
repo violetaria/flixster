@@ -8,33 +8,33 @@ Time spent: 8 hours spent in total
 
 The following **required** functionality is completed:
 
-* [ ] User can **scroll through current movies** from the Movie Database API
-* [ ] Layout is optimized with the [ViewHolder](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#improving-performance-with-the-viewholder-pattern) pattern.
-* [ ] For each movie displayed, user can see the following details:
-  * [ ] Title, Poster Image, Overview (Portrait mode)
-  * [ ] Title, Backdrop Image, Overview (Landscape mode)
+* [x] User can **scroll through current movies** from the Movie Database API
+* [x] Layout is optimized with the [ViewHolder](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#improving-performance-with-the-viewholder-pattern) pattern.
+* [x] For each movie displayed, user can see the following details:
+  * [x] Title, Poster Image, Overview (Portrait mode)
+  * [x] Title, Backdrop Image, Overview (Landscape mode)
 
 The following **optional** features are implemented:
 
-* [ ] User can **pull-to-refresh** popular stream to get the latest movies.
-* [ ] Display a nice default [placeholder graphic](http://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#configuring-picasso) for each image during loading.
-* [ ] Improved the user interface through styling and coloring.
+* [x] User can **pull-to-refresh** popular stream to get the latest movies.
+* [x] Display a nice default [placeholder graphic](http://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#configuring-picasso) for each image during loading.
+* [x] Improved the user interface through styling and coloring.
 
 The following **bonus** features are implemented:
 
-* [ ] Allow user to view details of the movie including ratings and popularity within a separate activity or dialog fragment.
-* [ ] When viewing a popular movie (i.e. a movie voted for more than 5 stars) the video should show the full backdrop image as the layout.  Uses [Heterogenous ListViews](http://guides.codepath.com/android/Implementing-a-Heterogenous-ListView) or [Heterogenous RecyclerView](http://guides.codepath.com/android/Heterogenous-Layouts-inside-RecyclerView) to show different layouts.
-* [ ] Allow video trailers to be played in full-screen using the YouTubePlayerView.
-    * [ ] Overlay a play icon for videos that can be played.
-    * [ ] More popular movies should start a separate activity that plays the video immediately.
-    * [ ] Less popular videos rely on the detail page should show ratings and a YouTube preview.
+* [x] Allow user to view details of the movie including ratings and popularity within a separate activity or dialog fragment.
+* [x] When viewing a popular movie (i.e. a movie voted for more than 5 stars) the video should show the full backdrop image as the layout.  Uses [Heterogenous ListViews](http://guides.codepath.com/android/Implementing-a-Heterogenous-ListView) or [Heterogenous RecyclerView](http://guides.codepath.com/android/Heterogenous-Layouts-inside-RecyclerView) to show different layouts.
+* [x] Allow video trailers to be played in full-screen using the YouTubePlayerView.
+    * [x] Overlay a play icon for videos that can be played.
+    * [x] More popular movies should start a separate activity that plays the video immediately.
+    * [x] Less popular videos rely on the detail page should show ratings and a YouTube preview.
 * [ ] Leverages the [data binding support module](http://guides.codepath.com/android/Applying-Data-Binding-for-Views) to bind data into layout templates.
 * [ ] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce boilerplate code.
 * [ ] Apply rounded corners for the poster or background images using [Picasso transformations](https://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#other-transformations)
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [x] Custom styling for rating bar
 
 ## Video Walkthrough
 
@@ -55,7 +55,7 @@ Describe any challenges encountered while building the app.
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2016] [Terri Chu]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
